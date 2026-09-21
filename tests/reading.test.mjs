@@ -1,0 +1,40 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import {readFile} from 'node:fs/promises';
+
+test('Article cover is layered before metadata and scroll updates TOC with cleanup',async()=>{
+ const window={innerHeight:600,scrollY:0,PORTFOLIO:{profile:{name:'Test'},projects:[],analyses:[],analysisFolders:[],about:{html:''}}};
+ const listeners=new Map();window.addEventListener=(name,fn)=>listeners.set(name,fn);window.removeEventListener=name=>listeners.delete(name);
+ const classes=()=>{const set=new Set();return {toggle:(k,v)=>v?set.add(k):set.delete(k),contains:k=>set.has(k)}};
+ const positions=[100,400,900];
+ const headings=positions.map(top=>({getBoundingClientRect:()=>({top:top-window.scrollY})}));
+ const rows=positions.map(()=>({classList:classes(),bar:{style:{}},querySelector(){return this.bar}}));
+ const links=positions.map((_,i)=>({dataset:{section:'section-'+i},classList:classes(),parentElement:rows[i],attrs:{},
+  setAttribute(k,v){this.attrs[k]=v},removeAttribute(k){delete this.attrs[k]},getBoundingClientRect:()=>({top:i*40,bottom:i*40+38})}));
+ const body={getBoundingClientRect:()=>({top:100-window.scrollY,bottom:1300-window.scrollY,height:1200})};
+ const blur={style:{}},progress={},toc={scrollTop:0,getBoundingClientRect:()=>({top:0,bottom:400})};
+ const article={querySelector:s=>s==='.reading-body'?body:blur,getBoundingClientRect:()=>({top:-window.scrollY})};
+ const main={querySelector:s=>s==='.reading-main'?article:s==='.reading-toc nav'?toc:progress,querySelectorAll:()=>links};
+ const document={querySelector:()=>main,getElementById:id=>headings[Number(id.split('-')[1])],documentElement:{scrollHeight:2000}};
+ let frame,disconnected=false;
+ const context={window,document,ResizeObserver:class{observe(){}disconnect(){disconnected=true}},requestAnimationFrame:fn=>{frame=fn;return 1},cancelAnimationFrame:()=>{frame=null}};
+ let source=await readFile('src/app.js','utf8');source=source.slice(0,source.indexOf("document.querySelectorAll('[data-orbit]')"));
+ const api=vm.runInNewContext(source+';({detail,setupReadingView,dispose:()=>disposeReadingView()})',context);
+ const html=api.detail({id:'x',title:'Title',summary:'Summary',cover:'content/x/cover.svg',tags:[],date:'',toc:[{id:'section-0',title:'Heading',level:2}],html:'<h2 id="section-0">Heading</h2>',parent:'nested'},false);
+ assert.equal((html.match(/src="content\/x\/cover.svg"/g)||[]).length,2);
+ assert.ok(html.indexOf('reading-hero')<html.indexOf('reading-header'));
+ assert.match(html,/#\/folder\/nested/);
+ api.setupReadingView();frame();
+ assert.equal(links[0].attrs['aria-current'],'location');
+ assert.equal(links[0].classList.contains('in-view'),true);
+ assert.equal(links[1].classList.contains('in-view'),true);
+ assert.equal(links[2].classList.contains('in-view'),false);
+ window.scrollY=450;listeners.get('scroll')();frame();
+ assert.equal(links[1].attrs['aria-current'],'location');
+ assert.equal(links[0].attrs['aria-current'],undefined);
+ assert.equal(rows[0].classList.contains('is-read'),true);
+ assert.equal(blur.style.opacity,'.15');
+ assert.notEqual(progress.textContent,'0%');
+ api.dispose();assert.equal(listeners.size,0);assert.equal(disconnected,true);
+});
