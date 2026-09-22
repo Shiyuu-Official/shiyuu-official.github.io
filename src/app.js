@@ -10,8 +10,8 @@ const main = document.querySelector('#main');
 function card(p,i){
  const picture=p.cover?'<img class="work-cover" src="'+esc(p.cover)+'" alt="'+esc(p.title)+'" loading="lazy">':'<div class="diagram">'+(diagrams[p.diagram]||diagrams.loop)+'</div>';
  return '<a class="dossier-work-card" href="#/project/'+encodeURIComponent(p.id)+'"><div class="work-illustration '+(p.theme==='paper'?'':p.theme)+(p.cover?' has-cover':'')+'">'+picture+
- '<span class="work-index">'+String(i+1).padStart(2,'0')+' / '+esc(p.type)+'</span>'+(p.placeholder?'<span class="work-placeholder">项目占位</span>':'')+
- '<span class="work-medium">'+esc(p.date)+'</span></div><div class="work-card-caption"><div><h3>'+esc(p.title)+'</h3><p>'+esc(p.stack)+'</p></div><span class="work-arrow" aria-hidden="true">↗</span></div></a>';
+ (p.placeholder?'<span class="work-placeholder">项目占位</span>':'')+
+ '</div><div class="work-card-caption"><div><h3>'+esc(p.title)+'</h3><p>'+esc(p.stack)+'</p></div><span class="work-arrow" aria-hidden="true">↗</span></div></a>';
 }
 function head(label,title,description){return '<header class="page-head"><p class="page-label">'+esc(label)+'</p><h1>'+esc(title)+'<span>.</span></h1><p>'+esc(description)+'</p></header>';}
 function directoryHead(number,label,title,description){return '<header class="analysis-blog-heading directory-heading"><div><a class="analysis-breadcrumb" href="#/">← 首页 <span>/ '+esc(number)+'</span></a><h1>'+esc(label)+' <span>'+esc(title)+'</span></h1><p>'+esc(description)+'</p></div><div class="analysis-heading-orbit" aria-hidden="true">'+orbit+'<span>'+esc(number)+'</span></div></header>';}

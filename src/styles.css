@@ -1,7 +1,7 @@
 /* Adapted composition and opening from entropy622/entropy622.github.io (Apache-2.0).
  * Rhine Lab mark: LBEILC/RhineLabUI (MIT). See licenses and #/credits.
  * Modified for a game-design portfolio, September 2026. */
-:root{--foreground:100 9% 10%;--muted-foreground:60 6% 35%;--background:34 13% 90%;--muted:36 16% 86%;--card:38 23% 94%;--border:37 12% 73%;--ring:37 32% 34%;--rhine-accent:#a67d48;--rhine-olive:#565c46;color-scheme:light}
+:root{--foreground:100 9% 10%;--muted-foreground:60 6% 30%;--background:34 13% 90%;--muted:36 16% 86%;--card:38 23% 94%;--border:37 12% 73%;--ring:37 32% 34%;--rhine-accent:#a67d48;--rhine-olive:#565c46;color-scheme:light}
 html.dark{--foreground:38 18% 89%;--muted-foreground:40 10% 70%;--background:90 8% 11%;--muted:80 7% 16%;--card:80 7% 15%;--border:60 6% 30%;--ring:36 38% 70%;--rhine-accent:#cbb397;--rhine-olive:#a6ad8e;color-scheme:dark}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:hsl(var(--background));color:hsl(var(--foreground));font-family:Manrope,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button{color:inherit;font:inherit;cursor:pointer}button,a{-webkit-tap-highlight-color:transparent}button{border:0;background:none}h1,h2,h3,p{margin:0}::selection{background:#cbb397;color:#151713}:where(a,button,input):focus-visible{outline:2px solid var(--rhine-accent);outline-offset:5px}.site-shell{max-width:1120px;padding:0 40px;margin:auto;min-height:100dvh;display:flex;flex-direction:column}.site-header{height:108px;display:flex;align-items:center;gap:30px}.wordmark{font-size:25px;font-weight:800;letter-spacing:-1.4px;display:flex;align-items:center;gap:13px}.brand-square{display:inline-block;width:7px;height:7px;background:var(--rhine-accent);margin-left:10px}.wordmark .brand-square{margin:0}nav{display:flex;align-items:center;gap:30px;margin-left:auto}nav a{font-size:14px;min-height:44px;display:flex;align-items:center;gap:7px}nav sup{font-size:10px;align-self:center;margin-top:-10px;color:hsl(var(--muted-foreground))}nav a[aria-current=page]{text-decoration:underline;text-decoration-color:var(--rhine-accent);text-underline-offset:9px;text-decoration-thickness:2px}.theme-toggle{font-size:25px;min-width:44px;height:44px}.menu-toggle{display:none}main{flex:1;outline:none}.skip-link{position:fixed;top:-100px;left:20px;padding:12px;background:hsl(var(--foreground));color:hsl(var(--background));z-index:10001}.skip-link:focus{top:12px}
 .dossier-home #home-title{font-size:clamp(3.8rem,7.4vw,6.3rem)}.dossier-intro{padding-bottom:65px}.dossier-eyebrow{font-size:12px;letter-spacing:.13em}.dossier-name{font-size:20px}.dossier-name span{font-size:14px}.dossier-bio>p:last-child{font-size:16px;line-height:1.95}.dossier-actions a{font-size:14px}.dossier-actions .dossier-action-primary{padding:12px 18px}.dossier-portrait{margin-left:10px}.portrait-frame{display:grid;place-items:center;background:hsl(var(--background));width:42%}.monogram{font-size:clamp(36px,5vw,66px);letter-spacing:-.09em;font-weight:500;border:1px solid hsl(var(--border));width:100%;height:100%;display:grid;place-items:center;border-radius:50%;position:relative}.monogram:after{content:'DESIGN ARCHIVE';position:absolute;bottom:22%;font-size:9px;font-weight:600;letter-spacing:.11em}.portrait-caption{font-size:12px}.portrait-caption span{font-size:12px}.rhine-orbit{display:block;width:100%;color:hsl(var(--foreground))}.orbit-light{stroke:hsl(var(--card));fill:hsl(var(--card))}circle.orbit-light[r="153"]{fill:none}.orbit-signal{fill:var(--rhine-accent)}.rhine-margin-orbit{position:fixed;right:-180px;top:36vh;width:400px;opacity:.12;pointer-events:none;z-index:-1;display:none}@media(min-width:1600px){.rhine-margin-orbit{display:block}}
@@ -122,3 +122,15 @@ html.dark .theme-moon{opacity:1;transform:rotate(0) scale(1)}
 
 /* Slightly lighter display lettering. */
 .dossier-home #home-title,.analysis-blog-heading h1,.wordmark,.footer-brand{font-weight:700}
+
+/* Give Markdown emphasis a stronger, theme-aware text color. */
+.markdown-body strong{color:hsl(60 6% 22%)}
+html.dark .markdown-body strong{color:hsl(38 18% 82%)}
+
+/* Subtle spacing for Markdown prose. */
+.markdown-body :is(p,li,td,th){letter-spacing:.03em}
+.markdown-body :is(code,pre){letter-spacing:normal}
+
+/* External article links underline only on hover or keyboard focus. */
+.markdown-body a:is([href^='https://'],[href^='http://']){text-decoration:none}
+.markdown-body a:is([href^='https://'],[href^='http://']):is(:hover,:focus-visible){text-decoration:underline;text-underline-offset:4px}
