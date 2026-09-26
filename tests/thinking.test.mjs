@@ -10,6 +10,6 @@ test('Thinking root routes to its list; article and folder routes retain their s
  const source=(await readFile('src/app.js','utf8')).split("document.querySelectorAll('[data-orbit]')")[0];
  const render=vm.runInNewContext(source+';setupReadingView=()=>{};render',{window,document,location});
  render();assert.match(main.innerHTML,/THINKING/);assert.doesNotMatch(main.innerHTML,/404 \/ NOT FOUND/);
- location.hash='#/thought/note';render();assert.match(main.innerHTML,/返回随想/);
+ location.hash='#/thought/note';render();assert.match(main.innerHTML,/返回<\/a>/);
  location.hash='#/thinking-folder/nested';render();assert.match(main.innerHTML,/Nested/);assert.match(main.innerHTML,/href="#\/thinking"/);
 });

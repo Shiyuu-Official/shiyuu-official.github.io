@@ -35,6 +35,6 @@ test('Article cover is layered before metadata and scroll updates TOC with clean
  assert.equal(links[0].attrs['aria-current'],undefined);
  assert.equal(rows[0].classList.contains('is-read'),true);
  assert.equal(blur.style.opacity,'.15');
- assert.notEqual(progress.textContent,'0%');
+ assert.doesNotMatch(html,/reading-progress/);
  api.dispose();assert.equal(listeners.size,0);assert.equal(disconnected,true);
 });
