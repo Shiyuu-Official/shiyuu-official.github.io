@@ -148,6 +148,6 @@ document.querySelector('.menu-toggle').addEventListener('click',()=>{const open=
 document.querySelector('#replay').addEventListener('click',playOpening);
 main.addEventListener('click',e=>{const link=e.target.closest('[data-section]');if(link){e.preventDefault();document.getElementById(link.dataset.section)?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelector('#opening-sequence').classList.remove('is-playing');document.querySelector('#navigation').classList.remove('expanded');document.querySelector('.menu-toggle').setAttribute('aria-expanded','false')}});
-window.addEventListener('hashchange',()=>render(true));document.querySelector('#year').textContent=new Date().getFullYear();syncTheme();render();
+window.addEventListener('hashchange',()=>render(true));syncTheme();render();
 
 document.querySelector('.skip-link').addEventListener('click',e=>{e.preventDefault();main.focus();main.scrollIntoView()});
