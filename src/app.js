@@ -127,7 +127,7 @@ function setupReadingView(){
 }
 
 document.querySelectorAll('[data-orbit]').forEach(el=>el.innerHTML=orbit);
-let openingTimer;function playOpening(){const opening=document.querySelector('#opening-sequence');clearTimeout(openingTimer);opening.classList.remove('is-playing');void opening.offsetWidth;opening.classList.add('is-playing');openingTimer=setTimeout(()=>opening.classList.remove('is-playing'),2400)}
+let openingTimer;function playOpening(){const opening=document.querySelector('#opening-sequence');clearTimeout(openingTimer);opening.classList.remove('is-playing');void opening.offsetWidth;opening.classList.add('is-playing');openingTimer=setTimeout(()=>opening.classList.remove('is-playing'),2600)}
 try{if(localStorage.getItem('shiyuu-theme')==='dark')document.documentElement.classList.add('dark');if(!sessionStorage.getItem('shiyuu-opening-seen')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){playOpening();sessionStorage.setItem('shiyuu-opening-seen','1')}}catch{}
 function syncTheme(){
  const dark=document.documentElement.classList.contains('dark');
