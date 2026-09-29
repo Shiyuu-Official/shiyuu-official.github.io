@@ -138,11 +138,32 @@ function syncTheme(){
  document.querySelector('meta[name="theme-color"]')?.setAttribute('content',dark?'#1b1e1a':'#e9e6e1');
 }
 document.querySelector('.theme-toggle').innerHTML='<svg class="theme-icon theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="theme-icon theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg>';
-document.querySelector('.theme-toggle').addEventListener('click',()=>{
+let themeTransitionBusy=false;
+document.querySelector('.theme-toggle').addEventListener('click',async()=>{
+ if(themeTransitionBusy)return;
  const root=document.documentElement;
- root.classList.toggle('dark');
- try{localStorage.setItem('shiyuu-theme',root.classList.contains('dark')?'dark':'light')}catch{}
- syncTheme();
+ const applyTheme=()=>{
+  root.classList.toggle('dark');
+  try{localStorage.setItem('shiyuu-theme',root.classList.contains('dark')?'dark':'light')}catch{}
+  syncTheme();
+ };
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches){applyTheme();return}
+ themeTransitionBusy=true;
+ try{
+  if(document.startViewTransition){
+   root.classList.add('theme-crossfade');
+   const transition=document.startViewTransition(applyTheme);
+   await transition.finished;
+  }else{
+   root.classList.add('theme-color-fade');
+   void root.offsetWidth;
+   applyTheme();
+   await new Promise(resolve=>setTimeout(resolve,500));
+  }
+ }finally{
+  root.classList.remove('theme-crossfade','theme-color-fade');
+  themeTransitionBusy=false;
+ }
 });
 document.querySelector('.menu-toggle').addEventListener('click',()=>{const open=document.querySelector('#navigation').classList.toggle('expanded');document.querySelector('.menu-toggle').setAttribute('aria-expanded',String(open))});
 document.querySelector('#replay').addEventListener('click',playOpening);
